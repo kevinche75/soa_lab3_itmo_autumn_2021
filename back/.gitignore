@@ -1,0 +1,10 @@
+/target
+/.idea
+*iml
+/src/main/webapp/static
+*.json
+*.ico
+index.html
+*.png
+robots.txt
+src/main/resources/hibernate.properties
