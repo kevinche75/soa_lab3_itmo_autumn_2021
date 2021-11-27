@@ -13,7 +13,7 @@ public class RemoteBeanLookup {
     public static LabWorkI lookupRemoteStatelessBean() {
         Properties jndiProperties = new Properties();
         jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.enterprise.naming.SerialInitContextFactory");
-        jndiProperties.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+//        jndiProperties.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
 //        jndiProperties.put(Context.PROVIDER_URL, "http-remoting://127.0.0.1:8080/");
         //This property is important for remote resolving
 //        jndiProperties.put("jboss.naming.client.ejb.context", true);

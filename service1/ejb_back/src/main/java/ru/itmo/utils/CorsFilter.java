@@ -5,9 +5,10 @@ import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
+import java.io.Serializable;
 
 @Provider
-public class CorsFilter implements ContainerResponseFilter {
+public class CorsFilter implements ContainerResponseFilter, Serializable {
 
     @Override
     public void filter(final ContainerRequestContext requestContext,

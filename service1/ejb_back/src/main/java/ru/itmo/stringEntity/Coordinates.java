@@ -6,12 +6,13 @@ import lombok.NoArgsConstructor;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @XmlRootElement
-public class Coordinates {
+public class Coordinates implements Serializable {
 
     @XmlElement
     private String id;

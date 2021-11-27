@@ -11,13 +11,14 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Entity
 @XmlRootElement
-public class Coordinates {
+public class Coordinates implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

@@ -14,10 +14,11 @@ import javax.ejb.Stateless;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBException;
+import java.io.Serializable;
 import java.util.Optional;
 
 @Stateless
-public class LabWorksService implements LabWorkI{
+public class LabWorksService implements LabWorkI, Serializable {
 
     private static final String NAME_PARAM = "name";
     private static final String CREATION_DATE_PARAM = "creationDate";

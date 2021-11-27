@@ -4,8 +4,10 @@ import lombok.Getter;
 import ru.itmo.converter.FieldConverter;
 import ru.itmo.utils.LabWorkParams;
 
+import java.io.Serializable;
+
 @Getter
-public class Validator {
+public class Validator implements Serializable {
 
     public static ValidatorResult validateLabWork(ru.itmo.stringEntity.LabWork stringLabWork){
         ValidatorResult validatorResult = new ValidatorResult();

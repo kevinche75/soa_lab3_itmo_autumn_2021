@@ -6,12 +6,13 @@ import lombok.NoArgsConstructor;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @XmlRootElement
-public class Person {
+public class Person implements Serializable {
 
     @XmlElement
     private String id;

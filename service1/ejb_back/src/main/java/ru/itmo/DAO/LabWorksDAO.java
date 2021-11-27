@@ -14,11 +14,12 @@ import ru.itmo.validator.ValidatorResult;
 
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class LabWorksDAO {
+public class LabWorksDAO implements Serializable {
 
     private void applyPagination(TypedQuery<LabWork> labWorkQuery, LabWorkParams params){
         int startIndex = (params.getPageIdx() - 1) * params.getPageSize();

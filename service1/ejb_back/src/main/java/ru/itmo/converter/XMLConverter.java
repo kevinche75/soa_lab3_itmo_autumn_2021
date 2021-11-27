@@ -2,11 +2,12 @@ package ru.itmo.converter;
 
 import javax.xml.bind.*;
 import javax.xml.namespace.QName;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
 
-public class XMLConverter implements Converter {
+public class XMLConverter implements Converter, Serializable {
     @SuppressWarnings({"rawtypes", "unchecked"})
     public <T> String listToStr(List<T> list, String name, T[] array) {
         try {

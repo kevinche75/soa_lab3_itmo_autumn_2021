@@ -3,13 +3,14 @@ package ru.itmo.converter;
 import ru.itmo.entity.Difficulty;
 import ru.itmo.validator.ValidatorResult;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class FieldConverter {
+public class FieldConverter implements Serializable {
 
     public static String stringConvert(String data, String fieldName, ValidatorResult validatorResult){
         if (data == null || data.isEmpty()){

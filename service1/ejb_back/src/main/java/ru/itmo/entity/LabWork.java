@@ -13,6 +13,7 @@ import javax.validation.constraints.Positive;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 @Entity
 @XmlRootElement
 @Table(name = "labwork")
-public class LabWork {
+public class LabWork implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @XmlElement

@@ -6,7 +6,9 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import ru.itmo.entity.*;
 
-public class HibernateUtil {
+import java.io.Serializable;
+
+public class HibernateUtil implements Serializable {
 
     private static final SessionFactory sessionFactory = buildSessionFactory();
 

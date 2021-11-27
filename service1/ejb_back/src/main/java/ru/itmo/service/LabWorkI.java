@@ -3,6 +3,7 @@ package ru.itmo.service;
 import javax.ejb.Remote;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import java.io.Serializable;
 
 @Remote
 public interface LabWorkI {
