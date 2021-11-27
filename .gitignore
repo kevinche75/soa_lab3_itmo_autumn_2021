@@ -35,3 +35,6 @@ back*/*.png
 back*/*robots.txt
 back*/src/main/resources/hibernate.properties
 .DS_Store
+ejb_back/.idea
+.idea
+service1/back/target service1/ejb_back/target service2/back2/target
