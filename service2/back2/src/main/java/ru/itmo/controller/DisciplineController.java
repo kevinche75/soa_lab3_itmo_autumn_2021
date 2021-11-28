@@ -1,43 +1,45 @@
 package ru.itmo.controller;
 
-import ru.itmo.service.DisciplineService;
-import ru.itmo.stringEntity.Discipline;
+import ru.itmo.service.RemoteBeanLookup;
+import ru.itmo.service.SecondServiceI;
+import ru.itmo.utils.ResponseWrapper;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/disciplines")
-@Produces(MediaType.APPLICATION_XML)
-@Consumes(MediaType.APPLICATION_XML)
 public class DisciplineController {
 
-    private DisciplineService service;
+    private SecondServiceI service;
 
     public DisciplineController(){
-        service = new DisciplineService();
+        service = RemoteBeanLookup.lookupRemoteStatelessBean();
+    }
+
+    private Response unwrap(ResponseWrapper responseWrapper){
+        return Response.status(responseWrapper.getCode()).entity(responseWrapper.getPayload()).build();
     }
 
     @GET
     public Response getDisciplines(){
-        return service.getDisciplines();
+        return unwrap(service.getDisciplines());
     }
 
     @GET
     @Path("/{id}")
     public Response getDiscipline(@PathParam("id")String disciplineId){
-        return service.getDiscipline(disciplineId);
+        return unwrap(service.getDiscipline(disciplineId));
     }
 
     @GET
     @Path("/{id}/labworks")
     public Response getDisciplineLabWorks(@PathParam("id") String disciplineId){
-        return service.getDisciplineLabWorks(disciplineId);
+        return unwrap(service.getDisciplineLabWorks(disciplineId));
     }
 
     @POST
-    public Response createDiscipline(Discipline strDiscipline){
-        return service.createDiscipline(strDiscipline);
+    public Response createDiscipline(String strDiscipline){
+        return unwrap(service.createDiscipline(strDiscipline));
     }
 
     @DELETE
@@ -45,13 +47,13 @@ public class DisciplineController {
     public Response deleteLabWorkFromDiscipline(
             @PathParam("discipline-id") String disciplineId,
             @PathParam("labwork-id") String labWorkId){
-        return service.removeLabWorkFromDiscipline(disciplineId, labWorkId);
+        return unwrap(service.removeLabWorkFromDiscipline(disciplineId, labWorkId));
     }
 
     @POST
     @Path("/{id}/{labwork-id}")
     public Response addLabWorkToDiscipline(@PathParam("id") String disciplineId, @PathParam("labwork-id") String labWorkId){
-        return service.addLabWorkToDiscipline(disciplineId, labWorkId);
+        return unwrap(service.addLabWorkToDiscipline(disciplineId, labWorkId));
     }
 
     @OPTIONS
@@ -59,5 +61,11 @@ public class DisciplineController {
     public Response options() {
         return Response.ok()
                 .build();
+    }
+
+    @GET
+    @Path(("/test"))
+    public Response test(){
+        return unwrap(service.test());
     }
 }

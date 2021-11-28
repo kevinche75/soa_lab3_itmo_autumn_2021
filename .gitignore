@@ -38,3 +38,6 @@ back*/src/main/resources/hibernate.properties
 ejb_back/.idea
 .idea
 service1/back/target service1/ejb_back/target service2/back2/target
+service1/ejb_back/target/
+service2/back2/target/
+service2/ejb_back2/target/

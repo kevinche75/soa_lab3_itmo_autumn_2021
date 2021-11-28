@@ -6,15 +6,15 @@ import ru.itmo.converter.XMLConverter;
 import ru.itmo.entity.LabWork;
 import ru.itmo.utils.LabWorkParams;
 import ru.itmo.utils.LabWorksResult;
+import ru.itmo.utils.ResponseWrapper;
 import ru.itmo.utils.ServerResponse;
 import ru.itmo.validator.Validator;
 import ru.itmo.validator.ValidatorResult;
 
 import javax.ejb.Stateless;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBException;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Optional;
 
 @Stateless
@@ -50,53 +50,55 @@ public class LabWorksService implements LabWorkI, Serializable {
         System.out.println("Bean launched");
     }
 
-    private LabWorkParams getLabWorksParams(MultivaluedMap<String, String> map){
+    private LabWorkParams getLabWorksParams(HashMap<String, String> map){
+
         LabWorkParams params = new LabWorkParams();
         params.setLabWorkParams(
-                map.getFirst(NAME_PARAM),
-                map.getFirst(CREATION_DATE_PARAM),
-                map.getFirst(MINIMAL_POINT_PARAM),
-                map.getFirst(MAXIMAL_POINT_PARAM),
-                map.getFirst(PERSONAL_QUALITIES_MAXIMUM_PARAM),
-                map.getFirst(DIFFICULTY_PARAM),
-                map.getFirst(COORDINATES_X_PARAM),
-                map.getFirst(COORDINATES_Y_PARAM),
-                map.getFirst(PERSON_NAME_PARAM),
-                map.getFirst(PERSON_WEIGHT_PARAM),
-                map.getFirst(LOCATION_X_PARAM),
-                map.getFirst(LOCATION_Y_PARAM),
-                map.getFirst(LOCATION_Z_PARAM),
-                map.getFirst(LOCATION_NAME_PARAM),
-                map.getFirst(PAGE_IDX_PARAM),
-                map.getFirst(PAGE_SIZE_PARAM),
-                map.getFirst(SORT_FIELD_PARAM)
+                map.get(NAME_PARAM),
+                map.get(CREATION_DATE_PARAM),
+                map.get(MINIMAL_POINT_PARAM),
+                map.get(MAXIMAL_POINT_PARAM),
+                map.get(PERSONAL_QUALITIES_MAXIMUM_PARAM),
+                map.get(DIFFICULTY_PARAM),
+                map.get(COORDINATES_X_PARAM),
+                map.get(COORDINATES_Y_PARAM),
+                map.get(PERSON_NAME_PARAM),
+                map.get(PERSON_WEIGHT_PARAM),
+                map.get(LOCATION_X_PARAM),
+                map.get(LOCATION_Y_PARAM),
+                map.get(LOCATION_Z_PARAM),
+                map.get(LOCATION_NAME_PARAM),
+                map.get(PAGE_IDX_PARAM),
+                map.get(PAGE_SIZE_PARAM),
+                map.get(SORT_FIELD_PARAM)
         );
         return params;
     }
 
-    public Response getInfo(int code, String message) {
+    public ResponseWrapper getInfo(int code, String message) {
         ServerResponse serverResponse = new ServerResponse(message);
-        return Response.status(code).entity(xmlConverter.toStr(serverResponse)).build();
+        return new ResponseWrapper(code, xmlConverter.toStr(serverResponse));
     }
 
-    public Response getAllLabWorks(MultivaluedMap<String, String> map) {
+    public ResponseWrapper getAllLabWorks(HashMap<String, String> map) {
+
         LabWorkParams params = getLabWorksParams(map);
         return getLabWorks(params);
     }
 
-    private Response getLabWorks(LabWorkParams params){
+    private ResponseWrapper getLabWorks(LabWorkParams params){
         if (!params.getValidatorResult().isStatus()) {
             return getInfo(400, params.getValidatorResult().getMessage());
         }
         try {
             LabWorksResult labWorksResult = dao.getAllLabWorks(params);
-            return Response.ok(xmlConverter.toStr(labWorksResult)).build();
+            return new ResponseWrapper(xmlConverter.toStr(labWorksResult));
         } catch (Exception e) {
             return getInfo(500, "Server error, try again");
         }
     }
 
-    public Response getLabWork(String str_id) {
+    public ResponseWrapper getLabWork(String str_id) {
         ValidatorResult validatorResult = new ValidatorResult();
         Long id = FieldConverter.longConvert(str_id, "LabWork Id", validatorResult);
         if (!validatorResult.isStatus()) {
@@ -105,7 +107,7 @@ public class LabWorksService implements LabWorkI, Serializable {
         try {
             Optional<LabWork> labWork = dao.getLabWork(id);
             if (labWork.isPresent()) {
-                return Response.ok(xmlConverter.toStr(labWork.get())).build();
+                return new ResponseWrapper(xmlConverter.toStr(labWork.get()));
             } else {
                 return getInfo(404, "No labWork with such id: " + id);
             }
@@ -114,19 +116,19 @@ public class LabWorksService implements LabWorkI, Serializable {
         }
     }
 
-    public Response getMinName() {
+    public ResponseWrapper getMinName() {
         try {
             LabWork lab = dao.getMinName();
             if (lab == null) {
                 return getInfo( 404, "No labs");
             }
-            return Response.ok(xmlConverter.toStr(xmlConverter.toStr(lab))).build();
+            return new ResponseWrapper(xmlConverter.toStr(xmlConverter.toStr(lab)));
         } catch (Exception e) {
             return getInfo( 500, "Server error, try again");
         }
     }
 
-    public Response countPersonalQualitiesMaximum(String str_pqm) {
+    public ResponseWrapper countPersonalQualitiesMaximum(String str_pqm) {
         ValidatorResult validatorResult = new ValidatorResult();
         Long pqm = FieldConverter.longConvert(str_pqm, "LabWork Personal Qualities Maximum", validatorResult);
         if (!validatorResult.isStatus()) {
@@ -144,8 +146,7 @@ public class LabWorksService implements LabWorkI, Serializable {
         }
     }
 
-
-    public Response createLabWork(String xmlStr) {
+    public ResponseWrapper createLabWork(String xmlStr) {
         try {
             ru.itmo.stringEntity.LabWork stringLabWork = xmlConverter.fromStr(xmlStr, ru.itmo.stringEntity.LabWork.class);
             ValidatorResult validatorResult = Validator.validateLabWork(stringLabWork);
@@ -154,7 +155,8 @@ public class LabWorksService implements LabWorkI, Serializable {
             }
             LabWork labWork = xmlConverter.fromStr(xmlStr, LabWork.class);
             Long id = dao.createLabWork(labWork);
-            return Response.ok().build();
+            return new ResponseWrapper(200);
+//            return Response.ok().build();
         } catch (JAXBException e) {
             return getInfo(400, "Unknown data structure");
         } catch (Exception e) {
@@ -162,7 +164,7 @@ public class LabWorksService implements LabWorkI, Serializable {
         }
     }
 
-    public Response updateLabWork(String str_id, String xmlStr) {
+    public ResponseWrapper updateLabWork(String str_id, String xmlStr) {
         try {
             ru.itmo.stringEntity.LabWork stringLabWorkUpdate = xmlConverter.fromStr(xmlStr, ru.itmo.stringEntity.LabWork.class);
             ValidatorResult validatorResult = Validator.validateLabWork(stringLabWorkUpdate);
@@ -178,7 +180,7 @@ public class LabWorksService implements LabWorkI, Serializable {
                 LabWork labWorkPresent = lab.get();
                 labWorkPresent.update(labWorkUpdate);
                 dao.updateLabWork(labWorkPresent);
-                return Response.ok().build();
+                return new ResponseWrapper(200);
             } else
                 return getInfo(404, "No LabWork with such id: " + labWorkUpdate.getId());
         } catch (JAXBException e) {
@@ -188,7 +190,7 @@ public class LabWorksService implements LabWorkI, Serializable {
         }
     }
 
-    public Response deleteLabWork(String str_id) {
+    public ResponseWrapper deleteLabWork(String str_id) {
         ValidatorResult validatorResult = new ValidatorResult();
         Long id = FieldConverter.longConvert(str_id, "Delete id", validatorResult);
 
@@ -200,16 +202,16 @@ public class LabWorksService implements LabWorkI, Serializable {
         if (!result)
             return getInfo(validatorResult.getCode(), validatorResult.getMessage());
         else
-            return Response.ok().build();
+            return new ResponseWrapper(200);
     }
 
     @Override
-    public Response test() {
-        return Response.ok().build();
+    public ResponseWrapper test() {
+        return new ResponseWrapper(200, "Success");
     }
 
     @Override
-    public Response getLessMaximumPoint(MultivaluedMap<String, String> map, String maximum_point) {
+    public ResponseWrapper getLessMaximumPoint(HashMap<String, String> map, String maximum_point) {
         LabWorkParams params = getLabWorksParams(map);
         params.setLessMaximalPointFlag(true);
         params.setMaximumPoint(maximum_point);

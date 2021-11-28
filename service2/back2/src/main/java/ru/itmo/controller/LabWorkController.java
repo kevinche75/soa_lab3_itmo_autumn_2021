@@ -1,20 +1,25 @@
 package ru.itmo.controller;
 
-import ru.itmo.service.LabWorkService;
+import ru.itmo.service.RemoteBeanLookup;
+import ru.itmo.service.SecondServiceI;
+import ru.itmo.utils.ResponseWrapper;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
 @Path("/labworks")
-@Produces(MediaType.APPLICATION_XML)
-@Consumes(MediaType.APPLICATION_XML)
 public class LabWorkController {
 
-    private LabWorkService service;
+    private SecondServiceI service;
 
     public LabWorkController(){
-        service = new LabWorkService();
+        service = RemoteBeanLookup.lookupRemoteStatelessBean();
+    }
+
+    private Response unwrap(ResponseWrapper responseWrapper){
+        return Response.status(responseWrapper.getCode()).entity(responseWrapper.getPayload()).build();
     }
 
     @PUT
@@ -22,6 +27,6 @@ public class LabWorkController {
     public Response increaseLabWorkDifficulty(
             @PathParam("labwork-id") String labWorkId,
             @PathParam("steps-count") String steps){
-        return service.increaseLabWorkDifficulty(labWorkId, steps);
+        return unwrap(service.increaseLabWorkDifficulty(labWorkId, steps));
     }
 }
