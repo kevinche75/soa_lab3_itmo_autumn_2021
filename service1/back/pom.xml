@@ -21,9 +21,15 @@
         <frontend-dir>${project.basedir}/../front</frontend-dir>
         <lombok.version>1.18.20</lombok.version>
         <javax.ejb-api.version>3.2.2</javax.ejb-api.version>
+        <consul-client.version>1.5.3</consul-client.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.orbitz.consul</groupId>
+            <artifactId>consul-client</artifactId>
+            <version>${consul-client.version}</version>
+        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>

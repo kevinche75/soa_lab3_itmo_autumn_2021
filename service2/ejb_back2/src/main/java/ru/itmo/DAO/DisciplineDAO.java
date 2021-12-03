@@ -5,10 +5,7 @@ import org.glassfish.jersey.SslConfigurator;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import ru.itmo.entity.Discipline;
-import ru.itmo.utils.DisciplineResult;
-import ru.itmo.utils.HibernateUtil;
-import ru.itmo.utils.LabWorksResult;
-import ru.itmo.utils.ServerResponse;
+import ru.itmo.utils.*;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -38,20 +35,20 @@ public class DisciplineDAO implements Serializable {
     @SneakyThrows
     public DisciplineDAO(){
         Context env = (Context)new InitialContext().lookup("java:comp/env");
-        backFirst = (String)env.lookup("uri");
+//        backFirst = (String)env.lookup("uri");
         hostname = (String)env.lookup("hostname");
         trustPassword = (String)env.lookup("keyPassword");
         keyPassword = (String)env.lookup("trustPassword");
-        api = (String)env.lookup("api");
-        labworks = (String)env.lookup("labworks");
+//        api = (String)env.lookup("api");
+//        labworks = (String)env.lookup("labworks");
     }
 
-    private String backFirst;
-    private String hostname;
-    private String trustPassword;
-    private String keyPassword;
-    private String api;
-    private String labworks;
+//    private String backFirst;
+    private final String hostname;
+    private final String trustPassword;
+    private final String keyPassword;
+//    private String api;
+//    private String labworks;
 
     public DisciplineResult getAllDisciplines(){
         List<Discipline> disciplines;
@@ -135,11 +132,13 @@ public class DisciplineDAO implements Serializable {
             if (discipline == null) {
                 throw new EntityNotFoundException(String.format("Discipline with id %s wasn't found", id));
             }
+            System.out.println("Discipline was found");
             Response labWorkResponse = getTarget().path(labWorkId.toString()).request().accept(MediaType.APPLICATION_XML).get();
             if (labWorkResponse.getStatus() != 200){
-                ServerResponse serverResponse = labWorkResponse.readEntity(ServerResponse.class);
+//                ServerResponse serverResponse = labWorkResponse.readEntity(ServerResponse.class);
                 throw new EntityNotFoundException(String.format("LabWork with id %s wasn't found", labWorkId));
             }
+            System.out.println("Response was found");
             Long disciplineId = null;
             try {
                 TypedQuery<BigInteger> query = session.createSQLQuery("select discipline_id from discipline_labworks where labwork_id = :labWorkId");
@@ -155,9 +154,11 @@ public class DisciplineDAO implements Serializable {
             session.update(discipline);
             transaction.commit();
         } catch (EntityExistsException | EntityNotFoundException e){
+            e.printStackTrace();
             throw e;
         } catch (Exception e){
-            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+//            if (transaction != null) transaction.rollback();
             throw e;
         }
     }
@@ -203,23 +204,28 @@ public class DisciplineDAO implements Serializable {
         return true;
     }
 
+    @SneakyThrows
     public WebTarget getTarget() {
-        URI uri = UriBuilder.fromUri(backFirst).build();
+        System.out.println(ServiceDiscovery.getUriFromConsul());
+        URI uri = UriBuilder.fromUri(ServiceDiscovery.getUriFromConsul()).build();
         Client client = createClientBuilderSSL();
-        return client.target(uri).path(api).path(labworks);
+        System.out.println("Created client");
+        return client.target(uri)
+//                .path(api).path(labworks)
+                ;
     }
 
     private Client createClientBuilderSSL() {
         SSLContext sslContext = SslConfigurator.newInstance()
+                .keyStoreFile("/Users/kevinche75/servers/payara5/glassfish/domains/domain3/config/payarastore")
+                .trustStoreFile("/Users/kevinche75/servers/payara5/glassfish/domains/domain3/config/payaratruststore.jks")
                 .keyPassword(keyPassword)
                 .trustStorePassword(trustPassword)
                 .createSSLContext();
+        System.out.println("Created context");
         HostnameVerifier hostnameVerifier = (hostname, sslSession) -> {
-            System.out.println(" hostname = " + hostname);
-            if (hostname.equals(this.hostname)) {
-                return true;
-            }
-            return false;
+            System.out.println("hostname = " + hostname);
+            return hostname.equals(this.hostname);
         };
         return ClientBuilder.newBuilder()
                 .sslContext(sslContext)

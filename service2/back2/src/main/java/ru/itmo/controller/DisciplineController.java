@@ -63,9 +63,10 @@ public class DisciplineController {
                 .build();
     }
 
-    @GET
-    @Path(("/test"))
-    public Response test(){
-        return unwrap(service.test());
-    }
+//    @SneakyThrows
+//    @GET
+//    @Path(("/test"))
+//    public Response test(){
+//        return Response.ok(ServiceDiscovery.getUriFromConsul()).build();
+//    }
 }
