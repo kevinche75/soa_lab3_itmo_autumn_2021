@@ -26,8 +26,8 @@ export const sizePerPageRenderer = ({
 );
 
 export const first_host = "https://localhost:50432/lab2/api/labworks"
-export const second_host = "https://localhost:8181/lab2/bars/disciplines"
-export const third_host = "https://localhost:8181/lab2/bars/labworks"
+export const second_host = "https://localhost:7070/lab2/bars/disciplines"
+export const third_host = "https://localhost:7070/lab2/bars/labworks"
 
 
 export const options = {
