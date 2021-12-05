@@ -8,6 +8,8 @@ import lombok.SneakyThrows;
 
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import java.util.Collections;
 
 @Singleton
@@ -16,18 +18,27 @@ import java.util.Collections;
  */
 public class ServiceDiscoveryWorker {
     private Consul client = null;
-    private static final String serviceId = "1";
+    private static String serviceId = "1";
 
     {
         try {
+            Context env = (Context)new InitialContext().lookup("java:comp/env");
+            serviceId = (String) env.lookup("serviceId");
             client = Consul.builder().build();
             AgentClient agentClient = client.agentClient();
+            String serviceName = (String) env.lookup("serviceName");
+            int port = (Integer) env.lookup("servicePort");
+            System.out.println(serviceName);
+            System.out.println(port);
             Registration service = ImmutableRegistration.builder()
                     .id(serviceId)
-                    .name("service1-app")
-                    .port(50432)
+                    .name(serviceName)
+                    .port(port)
                     .check(Registration.RegCheck.ttl(60L)) // registers with a TTL of 3 seconds
-                    .meta(Collections.singletonMap("app", "lab2/api/labworks"))
+                    .meta(Collections.singletonMap(
+                            (String) env.lookup("serviceMetaUriKey"),
+                            (String) env.lookup("serviceMetaUri"))
+                    )
                     .build();
 
             agentClient.register(service);

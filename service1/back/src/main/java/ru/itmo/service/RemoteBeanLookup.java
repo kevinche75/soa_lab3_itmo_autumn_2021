@@ -2,7 +2,6 @@ package ru.itmo.service;
 
 import ru.itmo.utils.ResponseWrapper;
 
-import javax.ejb.EJBException;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -15,12 +14,14 @@ public class RemoteBeanLookup {
         Properties jndiProperties = new Properties();
         jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.enterprise.naming.SerialInitContextFactory");
         try {
+            Context env = (Context)new InitialContext().lookup("java:comp/env");
             final javax.naming.Context context = new InitialContext(jndiProperties);
-            final String appName = "global";
-            final String moduleName = "ejb_back-snapshot";
-            final String beanName = "LabWorksService";
+            final String appName = (String) env.lookup("appName");
+            final String moduleName = (String) env.lookup("moduleName");
+            final String beanName = (String) env.lookup("beanName");
             final String viewClassName = LabWorkI.class.getName();
-            String lookupName = "java:" + appName + "/" + moduleName + "/" + beanName + "!" + viewClassName;
+            final String scope = (String) env.lookup("scope");
+            String lookupName = scope + ":" + appName + "/" + moduleName + "/" + beanName + "!" + viewClassName;
 
             return (LabWorkI) context.lookup(lookupName);
         } catch (NamingException e) {
@@ -30,47 +31,47 @@ public class RemoteBeanLookup {
 
                 @Override
                 public ResponseWrapper getAllLabWorks(HashMap<String, String> map) {
-                    throw new EJBException("bean is not available");
+                    return new ResponseWrapper(500, "Server error, try again!");
                 }
 
                 @Override
                 public ResponseWrapper getLabWork(String str_id) {
-                    throw new EJBException("bean is not available");
+                    return new ResponseWrapper(500, "Server error, try again!");
                 }
 
                 @Override
                 public ResponseWrapper getMinName() {
-                    throw new EJBException("bean is not available");
+                    return new ResponseWrapper(500, "Server error, try again!");
                 }
 
                 @Override
                 public ResponseWrapper countPersonalQualitiesMaximum(String str_pqm) {
-                    throw new EJBException("bean is not available");
+                    return new ResponseWrapper(500, "Server error, try again!");
                 }
 
                 @Override
                 public ResponseWrapper createLabWork(String xmlStr) {
-                    throw new EJBException("bean is not available");
+                    return new ResponseWrapper(500, "Server error, try again!");
                 }
 
                 @Override
                 public ResponseWrapper updateLabWork(String str_id, String xmlStr) {
-                    throw new EJBException("bean is not available");
+                    return new ResponseWrapper(500, "Server error, try again!");
                 }
 
                 @Override
                 public ResponseWrapper deleteLabWork(String str_id) {
-                    throw new EJBException("bean is not available");
+                    return new ResponseWrapper(500, "Server error, try again!");
                 }
 
                 @Override
                 public ResponseWrapper test() {
-                    throw new EJBException("bean is not available");
+                    return new ResponseWrapper(500, "Server error, try again!");
                 }
 
                 @Override
                 public ResponseWrapper getLessMaximumPoint(HashMap<String, String> map, String maximum_point) {
-                    throw new EJBException("bean is not available");
+                    return new ResponseWrapper(500, "Server error, try again!");
                 }
             };
         }

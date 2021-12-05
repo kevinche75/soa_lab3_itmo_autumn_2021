@@ -2,7 +2,6 @@ package ru.itmo.service;
 
 import ru.itmo.utils.ResponseWrapper;
 
-import javax.ejb.EJBException;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -14,12 +13,14 @@ public class RemoteBeanLookup {
         Properties jndiProperties = new Properties();
         jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.enterprise.naming.SerialInitContextFactory");
         try {
+            Context env = (Context)new InitialContext().lookup("java:comp/env");
             final Context context = new InitialContext(jndiProperties);
-            final String appName = "global";
-            final String moduleName = "ejb_back2-snapshot";
-            final String beanName = "SecondService";
+            final String appName = (String) env.lookup("appName");
+            final String moduleName = (String) env.lookup("moduleName");
+            final String beanName = (String) env.lookup("beanName");
             final String viewClassName = SecondServiceI.class.getName();
-            String lookupName = "java:" + appName + "/" + moduleName + "/" + beanName + "!" + viewClassName;
+            final String scope = (String) env.lookup("scope");
+            String lookupName = scope + ":" + appName + "/" + moduleName + "/" + beanName + "!" + viewClassName;
             System.out.println(lookupName);
             return (SecondServiceI) context.lookup(lookupName);
         } catch (NamingException e) {
@@ -29,36 +30,42 @@ public class RemoteBeanLookup {
 
                 @Override
                 public ResponseWrapper getDisciplines() {
-                    throw new EJBException("bean is not available");
+                    return new ResponseWrapper(500, "Server error, try again!");
                 }
 
                 @Override
                 public ResponseWrapper getDiscipline(String stringId) {
-                    throw new EJBException("bean is not available");                }
+                    return new ResponseWrapper(500, "Server error, try again!");
+                }
 
                 @Override
                 public ResponseWrapper createDiscipline(String stringDiscipline) {
-                    throw new EJBException("bean is not available");                }
+                    return new ResponseWrapper(500, "Server error, try again!");
+                }
 
                 @Override
                 public ResponseWrapper getDisciplineLabWorks(String stringDisciplineId) {
-                    throw new EJBException("bean is not available");                }
+                    return new ResponseWrapper(500, "Server error, try again!");
+                }
 
                 @Override
                 public ResponseWrapper addLabWorkToDiscipline(String stringDisciplineId, String stringLabWorkId) {
-                    throw new EJBException("bean is not available");                }
+                    return new ResponseWrapper(500, "Server error, try again!");
+                }
 
                 @Override
                 public ResponseWrapper removeLabWorkFromDiscipline(String stringDisciplineId, String stringLabWorkId) {
-                    throw new EJBException("bean is not available");                }
+                    return new ResponseWrapper(500, "Server error, try again!");
+                }
 
                 @Override
                 public ResponseWrapper increaseLabWorkDifficulty(String id, String stringSteps) {
-                    throw new EJBException("bean is not available");                }
+                    return new ResponseWrapper(500, "Server error, try again!");
+                }
 
                 @Override
                 public ResponseWrapper test() {
-                    throw new EJBException("bean is not available");
+                    return new ResponseWrapper(500, "Server error, try again!");
                 }
             };
         }

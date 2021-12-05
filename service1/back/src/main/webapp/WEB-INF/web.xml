@@ -6,4 +6,63 @@
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>My Secure Stuff</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+    <env-entry>
+        <env-entry-name>appName</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>global</env-entry-value>
+    </env-entry>
+    <env-entry>
+        <env-entry-name>moduleName</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>ejb_back-snapshot</env-entry-value>
+    </env-entry>
+    <env-entry>
+        <env-entry-name>beanName</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>LabWorksService</env-entry-value>
+    </env-entry>
+    <env-entry>
+        <env-entry-name>scope</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>java</env-entry-value>
+    </env-entry>
+    <env-entry>
+        <env-entry-name>serviceId</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>1</env-entry-value>
+    </env-entry>
+    <env-entry>
+        <env-entry-name>serviceName</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>service1-app</env-entry-value>
+    </env-entry>
+    <env-entry>
+        <env-entry-name>servicePort</env-entry-name>
+        <env-entry-type>java.lang.Integer</env-entry-type>
+        <env-entry-value>50432</env-entry-value>
+    </env-entry>
+    <env-entry>
+        <env-entry-name>serviceTTL</env-entry-name>
+        <env-entry-type>java.lang.Long</env-entry-type>
+        <env-entry-value>60</env-entry-value>
+    </env-entry>
+    <env-entry>
+        <env-entry-name>serviceMetaUriKey</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>app</env-entry-value>
+    </env-entry>
+    <env-entry>
+        <env-entry-name>serviceMetaUri</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>lab2/api/labworks</env-entry-value>
+    </env-entry>
 </web-app>
