@@ -35,20 +35,18 @@ public class DisciplineDAO implements Serializable {
     @SneakyThrows
     public DisciplineDAO(){
         Context env = (Context)new InitialContext().lookup("java:comp/env");
-//        backFirst = (String)env.lookup("uri");
         hostname = (String)env.lookup("hostname");
         trustPassword = (String)env.lookup("keyPassword");
         keyPassword = (String)env.lookup("trustPassword");
-//        api = (String)env.lookup("api");
-//        labworks = (String)env.lookup("labworks");
+        keyStorePath = (String) env.lookup("keyStorePath");
+        trustStorePath = (String) env.lookup("trustStorePath");
     }
 
-//    private String backFirst;
     private final String hostname;
     private final String trustPassword;
     private final String keyPassword;
-//    private String api;
-//    private String labworks;
+    private final String keyStorePath;
+    private final String trustStorePath;
 
     public DisciplineResult getAllDisciplines(){
         List<Discipline> disciplines;
@@ -206,23 +204,18 @@ public class DisciplineDAO implements Serializable {
 
     @SneakyThrows
     public WebTarget getTarget() {
-        System.out.println(ServiceDiscovery.getUriFromConsul());
         URI uri = UriBuilder.fromUri(ServiceDiscovery.getUriFromConsul()).build();
         Client client = createClientBuilderSSL();
-        System.out.println("Created client");
-        return client.target(uri)
-//                .path(api).path(labworks)
-                ;
+        return client.target(uri);
     }
 
     private Client createClientBuilderSSL() {
         SSLContext sslContext = SslConfigurator.newInstance()
-                .keyStoreFile("/Users/kevinche75/servers/payara5/glassfish/domains/domain3/config/payarastore")
-                .trustStoreFile("/Users/kevinche75/servers/payara5/glassfish/domains/domain3/config/payaratruststore.jks")
+                .keyStoreFile(keyStorePath)
+                .trustStoreFile(trustStorePath)
                 .keyPassword(keyPassword)
                 .trustStorePassword(trustPassword)
                 .createSSLContext();
-        System.out.println("Created context");
         HostnameVerifier hostnameVerifier = (hostname, sslSession) -> {
             System.out.println("hostname = " + hostname);
             return hostname.equals(this.hostname);

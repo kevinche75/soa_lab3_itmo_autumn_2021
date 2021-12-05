@@ -13,33 +13,23 @@
         </user-data-constraint>
     </security-constraint>
     <env-entry>
-        <env-entry-name>uri</env-entry-name>
+        <env-entry-name>appName</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>https://localhost:50432/lab2</env-entry-value>
+        <env-entry-value>global</env-entry-value>
     </env-entry>
     <env-entry>
-        <env-entry-name>hostname</env-entry-name>
+        <env-entry-name>moduleName</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>localhost</env-entry-value>
+        <env-entry-value>ejb_back2-snapshot</env-entry-value>
     </env-entry>
     <env-entry>
-        <env-entry-name>keyPassword</env-entry-name>
+        <env-entry-name>beanName</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>soasoa</env-entry-value>
+        <env-entry-value>SecondService</env-entry-value>
     </env-entry>
     <env-entry>
-        <env-entry-name>trustPassword</env-entry-name>
+        <env-entry-name>scope</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>soasoa</env-entry-value>
-    </env-entry>
-    <env-entry>
-        <env-entry-name>api</env-entry-name>
-        <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>api</env-entry-value>
-    </env-entry>
-    <env-entry>
-        <env-entry-name>labworks</env-entry-name>
-        <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>labworks</env-entry-value>
+        <env-entry-value>java</env-entry-value>
     </env-entry>
 </web-app>

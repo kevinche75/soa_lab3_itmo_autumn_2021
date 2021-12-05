@@ -32,14 +32,24 @@
         <env-entry-type>java.lang.String</env-entry-type>
         <env-entry-value>soasoa</env-entry-value>
     </env-entry>
-<!--    <env-entry>-->
-<!--        <env-entry-name>api</env-entry-name>-->
-<!--        <env-entry-type>java.lang.String</env-entry-type>-->
-<!--        <env-entry-value>api</env-entry-value>-->
-<!--    </env-entry>-->
-<!--    <env-entry>-->
-<!--        <env-entry-name>labworks</env-entry-name>-->
-<!--        <env-entry-type>java.lang.String</env-entry-type>-->
-<!--        <env-entry-value>labworks</env-entry-value>-->
-<!--    </env-entry>-->
+    <env-entry>
+        <env-entry-name>keyStorePath</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>/Users/kevinche75/servers/payara5/glassfish/domains/domain3/config/payarastore</env-entry-value>
+    </env-entry>
+    <env-entry>
+        <env-entry-name>trustStorePath</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>/Users/kevinche75/servers/payara5/glassfish/domains/domain3/config/payaratruststore.jks</env-entry-value>
+    </env-entry>
+    <env-entry>
+        <env-entry-name>serviceName</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>service1-app</env-entry-value>
+    </env-entry>
+    <env-entry>
+        <env-entry-name>serviceMetaUriKey</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>app</env-entry-value>
+    </env-entry>
 </web-app>

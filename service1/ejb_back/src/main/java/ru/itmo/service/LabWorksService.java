@@ -156,7 +156,6 @@ public class LabWorksService implements LabWorkI, Serializable {
             LabWork labWork = xmlConverter.fromStr(xmlStr, LabWork.class);
             Long id = dao.createLabWork(labWork);
             return new ResponseWrapper(200);
-//            return Response.ok().build();
         } catch (JAXBException e) {
             return getInfo(400, "Unknown data structure");
         } catch (Exception e) {
