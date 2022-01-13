@@ -1,3 +1,3 @@
 # Лабораторная 3
 ## Задание
-![task](task.jpg)
+![task](task.png)
